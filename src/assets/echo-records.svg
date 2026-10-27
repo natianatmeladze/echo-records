@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="225" viewBox="50 65 640 225" role="img" aria-labelledby="title desc">
+  <title id="title">echo records</title>
+  <desc id="desc">Minimal ivory vinyl-record emblem, vertical divider, and echo records wordmark on a transparent background.</desc>
+  <g fill="none" stroke="#F5F1E9" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Vinyl-inspired e emblem -->
+    <circle cx="165" cy="180" r="103" stroke-width="11"/>
+    <path d="M62 180 H268" stroke-width="11"/>
+    <circle cx="165" cy="180" r="23" stroke-width="11"/>
+    <circle cx="165" cy="180" r="4.5" fill="#F5F1E9" stroke="none"/>
+    <!-- Record grooves, intentionally open toward the right -->
+    <path d="M177 91 A91 91 0 0 1 254 157" stroke-width="3.5"/>
+    <path d="M177 105 A77 77 0 0 1 240 157" stroke-width="3.5"/>
+    <path d="M177 119 A63 63 0 0 1 226 157" stroke-width="3.5"/>
+    <path d="M177 133 A49 49 0 0 1 212 157" stroke-width="3.5"/>
+    <path d="M177 227 A49 49 0 0 0 212 203" stroke-width="3.5"/>
+    <path d="M177 241 A63 63 0 0 0 226 203" stroke-width="3.5"/>
+    <path d="M177 255 A77 77 0 0 0 240 203" stroke-width="3.5"/>
+    <path d="M177 269 A91 91 0 0 0 254 203" stroke-width="3.5"/>
+    <!-- Divider -->
+    <path d="M315 75 V285" stroke-width="3"/>
+  </g>
+  <g fill="#F5F1E9" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <text x="365" y="194" font-size="138" font-weight="300" letter-spacing="1">echo</text>
+    <text x="413" y="246" font-size="29" font-weight="400" letter-spacing="19">RECORDS</text>
+  </g>
+</svg>
