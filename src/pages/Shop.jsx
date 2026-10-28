@@ -23,7 +23,7 @@ const Shop = () => {
             term:
               selectedGenre === "All" ? "top albums" : `${selectedGenre} hits`,
             entity: "album",
-            limit: 50,
+            limit: 60,
           },
         });
 
@@ -40,7 +40,7 @@ const Shop = () => {
 
         setAlbums(formatted);
       } catch (err) {
-        setError("ალბომების წამოღება ვერ მოხერხდა");
+        setError("Failed to fetch albums");
       } finally {
         setLoading(false);
       }

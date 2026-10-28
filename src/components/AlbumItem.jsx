@@ -24,7 +24,7 @@ const AlbumItem = ({ album }) => {
 
         <div className="flex flex-col gap-1 pt-1">
           <div className="flex justify-between items-start gap-2">
-            <h3 className="font-semibold text-white text-sm tracking-tight group-hover:text-[#8B0000] transition-colors truncate">
+            <h3 className="font-semibold text-white text-sm tracking-normal group-hover:text-[#8B0000] transition-colors truncate">
               {album.title}
             </h3>
             <span className="text-zinc-400 font-medium text-xs">
