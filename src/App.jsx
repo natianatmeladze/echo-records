@@ -1,12 +1,17 @@
+import { Route, Routes } from "react-router";
 import "./App.css";
 import Header from "./components/Header";
-import Hero from "./components/Hero";
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
 
 function App() {
   return (
     <>
       <Header />
-      <Hero/>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/shop" element={<Shop/>}/>
+      </Routes>
     </>
   );
 }

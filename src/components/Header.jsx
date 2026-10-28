@@ -25,7 +25,7 @@ const Header = () => {
           </Link>
           <Link
             to="/shop"
-            className="hover:text-[#FF9F45] transition-colors"
+            className="hover:text-[#8B0000] transition-colors"
           >
             Shop
           </Link>
@@ -37,7 +37,7 @@ const Header = () => {
           </Link>
           <Link
             to="/about"
-            className="hover:text-[#FF9F45] transition-colors"
+            className="hover:text-[#8B0000] transition-colors"
           >
             About Us
           </Link>
@@ -52,7 +52,7 @@ const Header = () => {
         <div className="flex justify-end items-center">
           <Link
             to="/cart"
-            className="flex items-center gap-2 text-zinc-300 hover:text-[#FF9F45] transition-colors"
+            className="flex items-center gap-2 text-zinc-300 hover:text-[#8B0000] transition-colors"
           >
             <ShoppingBasket className="w-6 h-6" />
             <span className="text-md font-medium">0</span>
