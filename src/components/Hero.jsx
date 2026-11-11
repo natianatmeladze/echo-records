@@ -24,7 +24,6 @@ const Hero = () => {
             From rare vintage pressings to the latest indie releases - find the physical soul of your favorite music.
           </p>
 
-          {/* ღილაკები */}
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 w-full sm:w-auto">
             <Button 
               text="Explore Vinyls" 

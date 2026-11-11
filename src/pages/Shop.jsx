@@ -22,21 +22,34 @@ const Shop = () => {
           params: {
             term:
               selectedGenre === "All" ? "top albums" : `${selectedGenre} hits`,
-            entity: "album",
-            limit: 60,
+            entity: "song", 
+            limit: 100,
           },
         });
 
-        const formatted = response.data.results.map((item, index) => ({
-          id: item.collectionId || index,
-          title: item.collectionName,
-          artist: item.artistName,
-          genre: item.primaryGenreName,
-          price: `$${(22 + (index % 5) * 4).toFixed(2)}`,
-          cover: item.artworkUrl100
-            ? item.artworkUrl100.replace("100x100bb", "600x600bb")
-            : "",
-        }));
+        const uniqueAlbumsMap = new Map();
+
+        response.data.results.forEach((item) => {
+          if (item.collectionId && !uniqueAlbumsMap.has(item.collectionId)) {
+            uniqueAlbumsMap.set(item.collectionId, item);
+          }
+        });
+
+        const formatted = Array.from(uniqueAlbumsMap.values()).map(
+          (item, index) => ({
+            id: item.collectionId || index,
+            title: item.collectionName
+              ? item.collectionName.replace(/ - Single| Vinyl| \[Vinyl\]/gi, "")
+              : item.trackName,
+            artist: item.artistName,
+            genre: item.primaryGenreName,
+            price: `$${(22 + (index % 5) * 4).toFixed(2)}`,
+            cover: item.artworkUrl100
+              ? item.artworkUrl100.replace("100x100bb", "600x600bb")
+              : "",
+            previewUrl: item.previewUrl, 
+          })
+        );
 
         setAlbums(formatted);
       } catch (err) {

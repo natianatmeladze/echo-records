@@ -1,10 +1,13 @@
 import { Link } from "react-router";
 import logo from "../assets/echo-records.svg";
 import { ShoppingBasket } from "lucide-react";
+import { useCart } from "../context/CartContext";
 
 const Header = () => {
+  const { totalItems } = useCart();
+
   return (
-    <header className="sticky top-0 z-50 bg-[#0D0D0D]/90 border-2 border-zinc-800/80 px-6 py-4">
+    <header className="sticky top-0 z-50 bg-[#0D0D0D]/90 border-b border-zinc-800/80 px-6 py-4 backdrop-blur-md">
       <div className="max-w-7xl mx-auto grid grid-cols-3 items-center">
         <div className="flex justify-start items-center">
           <Link to="/">
@@ -55,7 +58,7 @@ const Header = () => {
             className="flex items-center gap-2 text-zinc-300 hover:text-[#8B0000] transition-colors"
           >
             <ShoppingBasket className="w-6 h-6" />
-            <span className="text-md font-medium">0</span>
+            <span className="text-md font-medium">{totalItems}</span>
           </Link>
         </div>
       </div>
