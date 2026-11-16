@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 import AlbumsList from "../components/AlbumsList";
 
 const GENRES = ["All", "Rock", "Pop", "Indie", "Jazz", "Electronic"];
@@ -18,11 +19,16 @@ const Shop = () => {
         setLoading(true);
         setError(null);
 
+        const query = searchTerm.trim()
+          ? searchTerm.trim()
+          : selectedGenre === "All"
+          ? "top albums"
+          : `${selectedGenre} hits`;
+
         const response = await axios.get("https://itunes.apple.com/search", {
           params: {
-            term:
-              selectedGenre === "All" ? "top albums" : `${selectedGenre} hits`,
-            entity: "song", 
+            term: query,
+            entity: "song",
             limit: 100,
           },
         });
@@ -47,7 +53,7 @@ const Shop = () => {
             cover: item.artworkUrl100
               ? item.artworkUrl100.replace("100x100bb", "600x600bb")
               : "",
-            previewUrl: item.previewUrl, 
+            previewUrl: item.previewUrl,
           })
         );
 
@@ -59,20 +65,22 @@ const Shop = () => {
       }
     };
 
-    fetchAlbums();
-  }, [selectedGenre]);
+    const delayDebounce = setTimeout(() => {
+      fetchAlbums();
+    }, 400);
 
-  const filteredAlbums = albums.filter((album) => {
-    return (
-      album.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      album.artist.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+    return () => clearTimeout(delayDebounce);
+  }, [selectedGenre, searchTerm]);
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-white py-12 px-6 lg:px-16">
       <div className="max-w-7xl mx-auto flex flex-col gap-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-zinc-800 pb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-zinc-800 pb-8"
+        >
           <div>
             <h1 className="text-3xl sm:text-5xl font-normal uppercase tracking-tight">
               SHOP VINYLS
@@ -91,15 +99,23 @@ const Shop = () => {
               className="w-full px-5 py-3 rounded-full bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-500 focus:outline-none transition-colors text-sm"
             />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex flex-wrap items-center gap-2.5 sm:gap-3"
+        >
           {GENRES.map((genre) => (
             <button
               key={genre}
-              onClick={() => setSelectedGenre(genre)}
-              className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 whitespace-nowrap cursor-pointer ${
-                selectedGenre === genre
+              onClick={() => {
+                setSelectedGenre(genre);
+                setSearchTerm("");
+              }}
+              className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+                selectedGenre === genre && !searchTerm
                   ? "bg-[#8B0000] text-white shadow-lg"
                   : "bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white hover:border-zinc-700"
               }`}
@@ -107,7 +123,7 @@ const Shop = () => {
               {genre}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {loading ? (
           <div className="text-center py-20 text-zinc-500">
@@ -115,8 +131,18 @@ const Shop = () => {
           </div>
         ) : error ? (
           <div className="text-center py-20 text-red-500">{error}</div>
+        ) : albums.length === 0 ? (
+          <div className="text-center py-20 text-zinc-500">
+            No albums found for "{searchTerm}".
+          </div>
         ) : (
-          <AlbumsList albums={filteredAlbums} />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.15 }}
+          >
+            <AlbumsList albums={albums} />
+          </motion.div>
         )}
       </div>
     </div>
