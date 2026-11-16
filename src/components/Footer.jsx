@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
+import geolabLogo from "../assets/geolab-logo.svg";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -132,8 +133,22 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="text-[11px] text-zinc-500">
-          © Echo Records. All rights reserved.
+        <div className="pt-6 border-t border-zinc-900 flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-zinc-500">
+          <p>© {new Date().getFullYear()} Echo Records. All rights reserved.</p>
+
+          <a
+            href="https://geolab.edu.ge"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Geolab"
+            className="opacity-80 hover:opacity-100 transition-opacity"
+          >
+            <img
+              src={geolabLogo}
+              alt="Geolab Logo"
+              className="h-15 w-auto object-contain"
+            />
+          </a>
         </div>
       </div>
     </footer>
