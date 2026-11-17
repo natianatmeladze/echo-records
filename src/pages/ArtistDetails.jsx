@@ -19,48 +19,64 @@ const ArtistDetails = () => {
       try {
         setLoading(true);
 
+        // entity: "song" მოგვცემს როგორც ალბომის ინფორმაციას, ისე previewUrl აუდიოს
         const response = await axios.get("https://itunes.apple.com/lookup", {
           params: {
             id,
-            entity: "album",
-            limit: 12,
+            entity: "song",
+            limit: 40,
           },
         });
 
         const results = response.data.results || [];
 
         const artistInfo = results.find((item) => item.wrapperType === "artist");
-        const albumResults = results.filter(
-          (item) => item.wrapperType === "collection"
+        const trackResults = results.filter(
+          (item) => item.wrapperType === "track" && item.collectionId
         );
 
-        if (!artist && artistInfo) {
-          const firstCover = albumResults[0]?.artworkUrl100
-            ? albumResults[0].artworkUrl100.replace("100x100bb", "600x600bb")
-            : "";
+        // უნიკალური ალბომების ამოღება თავისი previewUrl-ით
+        const uniqueAlbumsMap = new Map();
 
+        trackResults.forEach((item) => {
+          if (!uniqueAlbumsMap.has(item.collectionId)) {
+            const index = uniqueAlbumsMap.size;
+            uniqueAlbumsMap.set(item.collectionId, {
+              id: item.collectionId,
+              title: item.collectionName.replace(
+                / - Single| Vinyl| \[Vinyl\]/gi,
+                ""
+              ),
+              artist: item.artistName,
+              genre: item.primaryGenreName,
+              price: `$${(24 + (index % 5) * 4).toFixed(2)}`,
+              cover: item.artworkUrl100
+                ? item.artworkUrl100.replace("100x100bb", "600x600bb")
+                : "",
+              previewUrl: item.previewUrl || null,
+            });
+          } else if (
+            !uniqueAlbumsMap.get(item.collectionId).previewUrl &&
+            item.previewUrl
+          ) {
+            uniqueAlbumsMap.get(item.collectionId).previewUrl = item.previewUrl;
+          }
+        });
+
+        const formattedAlbums = Array.from(uniqueAlbumsMap.values()).slice(0, 12);
+
+        if (!artist && artistInfo) {
           setArtist({
             id: artistInfo.artistId,
             name: artistInfo.artistName,
             genre: artistInfo.primaryGenreName || "Music",
-            image: firstCover,
+            image: formattedAlbums[0]?.cover || "",
             country: "International",
             story: `${artistInfo.artistName} is a celebrated ${
               artistInfo.primaryGenreName || "recording"
             } artist whose catalog is mastered for analog warmth and pressed on heavyweight 180g vinyl at Echo Records.`,
           });
         }
-
-        const formattedAlbums = albumResults.map((item, index) => ({
-          id: item.collectionId,
-          title: item.collectionName.replace(/ - Single| Vinyl| \[Vinyl\]/gi, ""),
-          artist: item.artistName,
-          genre: item.primaryGenreName,
-          price: `$${(24 + (index % 5) * 4).toFixed(2)}`,
-          cover: item.artworkUrl100
-            ? item.artworkUrl100.replace("100x100bb", "600x600bb")
-            : "",
-        }));
 
         setAlbums(formattedAlbums);
       } catch (error) {
@@ -98,6 +114,7 @@ const ArtistDetails = () => {
   return (
     <main className="min-h-screen bg-[#0D0D0D] text-white py-12 px-6 lg:px-16">
       <div className="max-w-7xl mx-auto flex flex-col gap-14">
+        {/* უკან დაბრუნების ღილაკი */}
         <div>
           <button
             onClick={() => navigate("/artists")}
@@ -108,6 +125,7 @@ const ArtistDetails = () => {
           </button>
         </div>
 
+        {/* არტისტის პროფილი და ისტორია */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
