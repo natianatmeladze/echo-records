@@ -19,7 +19,6 @@ const ArtistDetails = () => {
       try {
         setLoading(true);
 
-        // entity: "song" მოგვცემს როგორც ალბომის ინფორმაციას, ისე previewUrl აუდიოს
         const response = await axios.get("https://itunes.apple.com/lookup", {
           params: {
             id,
@@ -30,12 +29,13 @@ const ArtistDetails = () => {
 
         const results = response.data.results || [];
 
-        const artistInfo = results.find((item) => item.wrapperType === "artist");
+        const artistInfo = results.find(
+          (item) => item.wrapperType === "artist",
+        );
         const trackResults = results.filter(
-          (item) => item.wrapperType === "track" && item.collectionId
+          (item) => item.wrapperType === "track" && item.collectionId,
         );
 
-        // უნიკალური ალბომების ამოღება თავისი previewUrl-ით
         const uniqueAlbumsMap = new Map();
 
         trackResults.forEach((item) => {
@@ -45,7 +45,7 @@ const ArtistDetails = () => {
               id: item.collectionId,
               title: item.collectionName.replace(
                 / - Single| Vinyl| \[Vinyl\]/gi,
-                ""
+                "",
               ),
               artist: item.artistName,
               genre: item.primaryGenreName,
@@ -63,7 +63,10 @@ const ArtistDetails = () => {
           }
         });
 
-        const formattedAlbums = Array.from(uniqueAlbumsMap.values()).slice(0, 12);
+        const formattedAlbums = Array.from(uniqueAlbumsMap.values()).slice(
+          0,
+          12,
+        );
 
         if (!artist && artistInfo) {
           setArtist({
@@ -114,7 +117,6 @@ const ArtistDetails = () => {
   return (
     <main className="min-h-screen bg-[#0D0D0D] text-white py-12 px-6 lg:px-16">
       <div className="max-w-7xl mx-auto flex flex-col gap-14">
-        {/* უკან დაბრუნების ღილაკი */}
         <div>
           <button
             onClick={() => navigate("/artists")}
@@ -124,8 +126,6 @@ const ArtistDetails = () => {
             Back to Artists
           </button>
         </div>
-
-        {/* არტისტის პროფილი და ისტორია */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
